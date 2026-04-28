@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Someone Special 🎉</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      color: white;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      overflow-x: hidden;
+    }
+
+    .page {
+      display: none;
+      padding-top: 60px;
+    }
+
+    .active { display: block; }
+
+    .card {
+      background: rgba(255,255,255,0.1);
+      padding: 25px;
+      margin: auto;
+      border-radius: 20px;
+      width: 85%;
+      max-width: 380px;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      text-align: center;
+    }
+
+    button {
+      background: #00d2ff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    img { width: 100%; border-radius: 15px; margin-top: 10px; }
+
+    #cake { width: 150px; cursor: pointer; }
+
+    #startOverlay {
+      position: fixed;
+      inset: 0;
+      background: #1e3c72;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .spark {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- START -->
+<div id="startOverlay">
+  <h1>I made something for you… 🎁</h1>
+  <button onclick="initSite()">Open</button>
+</div>
+
+<!-- PAGE 1 -->
+<div id="page1" class="page">
+  <div class="card">
+    <h2>🔐 Enter Code</h2>
+    <input type="password" id="passInput" maxlength="4">
+    <br>
+    <button onclick="checkPassword()">Unlock</button>
+    <p id="errorMsg" style="color:red; display:none;">Wrong password</p>
+  </div>
+</div>
+
+<!-- PAGE 2 -->
+<div id="page2" class="page">
+  <div class="card">
+
+    <h1>🎂 Happy Birthday 🎂</h1>
+
+    <p>
+    I was thinking what to write here…  
+    but honestly, you already know you're special 😉
+    </p>
+
+    <p>
+    Still… today I’ll say it properly —  
+    you make things feel a little better just by being you 💙
+    </p>
+
+    <p>
+    So yeah… stay happy, keep smiling…  
+    and maybe save some of that smile for me too 😄
+    </p>
+
+    <p><strong>- From someone 😊</strong></p>
+
+    <button onclick="nextPage()">Wait… one more thing 😉 ➡️</button>
+
+  </div>
+</div>
+
+<!-- COUNTDOWN -->
+<div id="pageCount" class="page">
+  <h1 id="countdown">3</h1>
+</div>
+
+<!-- BIG MESSAGE -->
+<div id="pageWish" class="page">
+  <h1>🎉 HAPPY BIRTHDAY 🎉</h1>
+</div>
+
+<!-- PAGE 3 -->
+<div id="page3" class="page">
+  <div class="card">
+
+    <h2>📸 Memories</h2>
+    <img src="https://picsum.photos/400/300">
+
+    <div style="position:relative; display:inline-block; margin-top:20px;">
+
+      <img id="cake" src="https://img.icons8.com/emoji/96/000000/birthday-cake-emoji.png" onclick="blowCandle()">
+
+      <div id="flames" style="
+        position:absolute;
+        top:0;
+        left:50%;
+        transform:translate(-50%, -40%);
+        font-size:18px;">
+        🔥 🔥 🔥
+      </div>
+
+    </div>
+
+    <p id="wishMsg" style="display:none;">
+      ✨ I hope at least one of your wishes is about me 😄✨
+    </p>
+
+    <button onclick="celebrate()">Celebrate 🎆</button>
+
+  </div>
+</div>
+
+<!-- AUDIO -->
+<audio id="music" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5c6c4b8c71.mp3"></audio>
+
+<script>
+
+const music = document.getElementById("music");
+
+// START
+function initSite(){
+  document.getElementById("startOverlay").style.display = "none";
+  showPage("page1");
+
+  // unlock audio safely
+  music.muted = true;
+  music.play().then(()=>{
+    music.pause();
+    music.currentTime = 0;
+    music.muted = false;
+  }).catch(()=>{});
+}
+
+// PASSWORD
+function checkPassword(){
+  if(document.getElementById("passInput").value === "1234"){
+    music.play().catch(()=>{});
+    showPage("page2");
+  } else {
+    document.getElementById("errorMsg").style.display = "block";
+  }
+}
+
+// PAGE SWITCH
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+// NEXT
+function nextPage(){
+  showPage("pageCount");
+
+  let count = 3;
+  let el = document.getElementById("countdown");
+
+  let i = setInterval(()=>{
+    count--;
+    el.innerText = count;
+
+    if(count === 0){
+      clearInterval(i);
+
+      showPage("pageWish");
+      fireworks();
+
+      setTimeout(()=>{
+        showPage("page3");
+      },2000);
+    }
+  },1000);
+}
+
+// CAKE
+function blowCandle(){
+  document.getElementById("flames").style.display="none";
+  document.getElementById("wishMsg").style.display="block";
+  fireworks();
+}
+
+// CELEBRATE
+function celebrate(){
+  fireworks();
+}
+
+// FIREWORKS
+function fireworks(){
+  for(let i=0;i<30;i++){
+    let d=document.createElement("div");
+    d.className="spark";
+    document.body.appendChild(d);
+
+    let x=window.innerWidth/2;
+    let y=window.innerHeight/2;
+
+    d.style.left=x+"px";
+    d.style.top=y+"px";
+
+    let a=Math.random()*2*Math.PI;
+    let dist=Math.random()*150;
+
+    d.style.background=`hsl(${Math.random()*360},100%,60%)`;
+
+    d.animate([
+      {transform:"translate(0,0)",opacity:1},
+      {transform:`translate(${Math.cos(a)*dist}px,${Math.sin(a)*dist}px)`,opacity:0}
+    ],{duration:800});
+
+    setTimeout(()=>d.remove(),800);
+  }
+}
+
+</script>
+
+</body>
+</html>
